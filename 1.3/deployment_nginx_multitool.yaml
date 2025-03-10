@@ -1,19 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myjob
+  name: nginx
   labels:
-    app: myjob
+    app: nginx
 spec:
   selector:
     matchLabels:
-      app: myjob
+      app: nginx
   replicas: 1
   template:
     metadata:
       labels:
-        app: myjob
+        app: nginx
     spec:
       containers:
-      - name: myjob
+      - name: nginx
         image: nginx:latest
+      initContainers:
+      - name: multitool
+        image: wbitt/network-multitool:latest
