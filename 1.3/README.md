@@ -1,31 +1,47 @@
-### Задание 1. Создать Pod с именем hello-world
+### Задание 1. Создать Deployment и обеспечить доступ к репликам приложения из другого Pod
 
-Созданный pod
+Во избежание ошибки сразу-же посадил multitool на порт 8080. Тем не менее, пока не добавил sleep infinity во внутрь контейнера, он падал с ошибкой.
 
-![alt text](<Screenshot 2025-03-07 000857.png>)
+Pod без масштабирования
 
-Проброс портов
+![alt text](deployment.png)
 
-![alt text](<Screenshot 2025-03-07 000821.png>)
+Pod с масштабированием
 
-Результат в браузере
+![alt text](deployment_replicas.png)
 
-![alt text](<Screenshot 2025-03-07 000739.png>)
+IP адреса реплик
 
-### Задание 2. Создать Service и подключить его к Pod
+![alt text](deployment_replicas_ip.png)
 
-Созданный pod и сервис
+Созданный service
 
-![alt text](<Screenshot 2025-03-07 201516.png>)
+![alt text](service.png)
 
-Информация о сервисе и подключенном pod
+Service подключен к репликам
 
-![alt text](<Screenshot 2025-03-07 201157.png>)
+![alt text](service2.png)
 
-Проброс портов
+Созданный Pod multitool и запрос curl с него
 
-![alt text](<Screenshot 2025-03-07 201634.png>)
+![alt text](curl_from_multitool.png)
 
-Результат в браузере
+Манифесты [Deployment Nginx+Multitool](deployment_nginx_multitool.yaml), [Service](service_for_replicas.yaml), [Pod multitool for curl](pod_multitool.yaml)
 
-![alt text](<Screenshot 2025-03-07 201616.png>)
+### Задание 2. Создать Deployment и обеспечить старт основного контейнера при выполнении условий
+
+Ожидания сервиса, после которого должен стартовать nginx было реализовано через проверку локального домена (nginx-service.default.svc.cluster.local) в default namespace, чтобы отсечь лишние домены от яндекса
+
+Ожидание сервиса
+
+![alt text](wait_for_nginx_2.png)
+
+![alt text](wait_for_nginx.png)
+
+После старта сервиса
+
+![alt text](start_nginx.png)
+
+![alt text](start_nginx_2.png)
+
+Манифесты [Deployment Nginx with BusyBox](deployment_nginx_busybox.yaml), [Service](service_for_replicas.yaml)
