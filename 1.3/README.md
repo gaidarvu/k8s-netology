@@ -4,7 +4,7 @@
 
 Pod без масштабирования
 
-![alt text](deployment.png)
+![1.3/deployment.png](deployment.png)
 
 Pod с масштабированием
 
