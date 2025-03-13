@@ -16,6 +16,6 @@ Pod multitool и запрос curl с него
 
 Запрос curl с браузера
 
-![alt text](curl_from_multitool.png)
+![alt text](image.png)
 
 Манифест [Service](service_for_nginx_external.yaml)
