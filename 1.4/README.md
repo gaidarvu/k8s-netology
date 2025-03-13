@@ -2,7 +2,13 @@
 
 Pod multitool и запрос curl с него
 
-![alt text](curl_from_multitool.png)
+На 9001
+
+![alt text](9001.png)
+
+На 9002
+
+![alt text](9002.png)
 
 Манифесты [deployment_nginx_multitool.yaml](deployment_nginx_multitool.yaml), [Pod multitool for curl](pod_multitool.yaml)
 
