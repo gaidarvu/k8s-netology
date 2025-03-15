@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multi-container-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: multi-container-app
+  template:
+    metadata:
+      labels:
+        app: multi-container-app
+    spec:
+      volumes:
+        - name: shared-data
+          emptyDir: {}
+      containers:
+        - name: busybox
+          image: busybox
+          command: ["sh", "-c", "while true; do echo \"$(date) - time&date from busybox\" >> /data/time.txt; sleep 5; done"]
+          volumeMounts:
+            - name: shared-data
+              mountPath: /data
+        - name: multitool-reader
+          image: wbitt/network-multitool
+          volumeMounts:
+            - name: shared-data
+              mountPath: /data
