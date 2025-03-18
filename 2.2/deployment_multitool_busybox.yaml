@@ -9,7 +9,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: ""
+  storageClassName: "manual"
   local:
     path: "/mnt/data"
   nodeAffinity:
@@ -31,7 +31,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: ""
+  storageClassName: "manual"
   volumeName: local-pv
 ---
 apiVersion: apps/v1
