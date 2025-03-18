@@ -1,32 +1,3 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: multi-container-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: multi-container-app
-  template:
-    metadata:
-      labels:
-        app: multi-container-app
-    spec:
-      volumes:
-        - name: shared-data
-          emptyDir: {}
-      containers:
-        - name: busybox
-          image: busybox
-          command: ["sh", "-c", "while true; do echo \"$(date) - time&date from busybox\" >> /data/time.txt; sleep 5; done"]
-          volumeMounts:
-            - name: shared-data
-              mountPath: /data
-        - name: multitool-reader
-          image: wbitt/network-multitool
-          volumeMounts:
-            - name: shared-data
-              mountPath: /data
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -35,13 +6,20 @@ metadata:
 spec:
   capacity:
     storage: 1Gi
-  volumeMode: Filesystem
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
   local:
-    path: /mnt/disks/volume1
-  storageClassName: manual
+    path: "/mnt/data"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - worker-node
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -49,8 +27,40 @@ metadata:
   name: local-pvc
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
-  storageClassName: manual
+  storageClassName: ""
+  volumeName: local-pv
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox-multitool
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: busybox-multitool
+  template:
+    metadata:
+      labels:
+        app: busybox-multitool
+    spec:
+      containers:
+        - name: busybox
+          image: busybox
+          command: ["sh", "-c", "while true; do echo \"$(date) - time&date from busybox\" >> /data/time.txt; sleep 5; done"]
+          volumeMounts:
+            - name: shared-storage
+              mountPath: /data
+        - name: multitool
+          image: wbitt/network-multitool
+          volumeMounts:
+            - name: shared-storage
+              mountPath: /data
+      volumes:
+        - name: shared-storage
+          persistentVolumeClaim:
+            claimName: local-pvc
