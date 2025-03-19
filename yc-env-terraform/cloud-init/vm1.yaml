@@ -19,6 +19,7 @@ runcmd:
   - chown -f -R gaidar /home/gaidar/.kube
   - sleep 5m
   - microk8s enable ingress
+  - microk8s enable hostpath-storage
 
 # microk8s config
 # sed -i '/IP\.2 = [0-9.]\+/a IP.3 = '$(wget -O - -q icanhazip.com)'' /var/snap/microk8s/current/certs/csr.conf.template
