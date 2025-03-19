@@ -9,17 +9,9 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: "manual"
-  local:
-    path: "/mnt/data"
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - worker-node
+  storageClassName: manual
+  hostPath:
+    path: /mnt/data
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -28,11 +20,11 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: manual
+  volumeName: local-pv
   resources:
     requests:
       storage: 1Gi
-  storageClassName: "manual"
-  volumeName: local-pv
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -51,12 +43,13 @@ spec:
       containers:
         - name: busybox
           image: busybox
-          command: ["sh", "-c", "while true; do echo \"$(date) - time&date from busybox\" >> /data/time.txt; sleep 5; done"]
+          command: ["sh", "-c", "while true; do echo $(date) >> /data/output.txt; sleep 5; done"]
           volumeMounts:
             - name: shared-storage
               mountPath: /data
         - name: multitool
           image: wbitt/network-multitool
+          command: ["sh", "-c", "tail -f /data/output.txt"]
           volumeMounts:
             - name: shared-storage
               mountPath: /data
