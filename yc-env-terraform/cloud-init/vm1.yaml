@@ -17,7 +17,7 @@ runcmd:
   - snap install microk8s --classic
   - usermod -a -G microk8s gaidar
   - chown -f -R gaidar /home/gaidar/.kube
-  - sleep 5m
+  - sleep 1m
   - microk8s enable ingress
   - microk8s enable hostpath-storage
 
