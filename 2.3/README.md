@@ -16,26 +16,22 @@ index.html в смонтированной директории
 
 ![alt text](<mount page.png>)
 
+Манифесты [Deployment](deployment_multitool_nginx.yaml), [Service](service.yaml), [ConfigMaps](configmap.yaml)
+
 ### Задание 2. Создать приложение с вашей веб-страницей, доступной по HTTPS
 
-Созданные pod, pv, pvc
+Поды поднялись
 
-![alt text](<depl start.png>)
+![alt text](applyed2.png)
 
-Пробуем создать файл и записать туда информацию
+Генерим самоподписанный сертификат
 
-![alt text](readwrite.png)
+![alt text](ssl1.png)
 
-Удалось отыскать его на ноде в default-storage
+![alt text](ssl2.png)
 
-![alt text](<file on node.png>)
+Доступ по https из service
 
-Почему-бы не записать файл напрямую в сторадж
+![alt text](https_access.png)
 
-![alt text](<test write to storage.png>)
-
-Идем на pod и смотрим что получилось
-
-![alt text](<test pass.png>)
-
-Манифест [Deployment](deployment_multitool.yaml)
+Манифесты [Deployment](deployment_nginx.yaml), [Service](service_nginx.yaml), [ConfigMaps](configmap_nginx.yaml), [Ingress](ingress.yaml)
