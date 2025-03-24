@@ -14,4 +14,6 @@
 
 ![alt text](forbidden.png)
 
+Для поднятия роли и пода пришлось в kubectl переключаться между админом и пользователем
+
 Манифесты [Role](role.yaml), [RoleBinding](rolebinding.yaml), [Pod](pod-netology-web.yaml)
