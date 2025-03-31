@@ -1,0 +1,54 @@
+app-name:
+  image:
+    repository: your-app-image
+    tag: latest
+    pullPolicy: IfNotPresent
+  replicas: 1
+  service:
+    type: ClusterIP
+    port: 80
+  resources: {}
+  env: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-app
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.app-name.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: app
+          image: "{{ .Values.app-name.image.repository }}:{{ .Values.app-name.image.tag }}"
+          imagePullPolicy: {{ .Values.app-name.image.pullPolicy }}
+          ports:
+            - containerPort: 80
+          env:
+            {{- range $key, $value := .Values.app-name.env }}
+            - name: "{{ $key }}"
+              value: "{{ $value }}"
+            {{- end }}
+          resources: {{ toYaml .Values.app-name.resources | nindent 12 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-service
+spec:
+  selector:
+    app: {{ .Release.Name }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.app-name.service.port }}
+      targetPort: 80
+  type: {{ .Values.app-name.service.type }}
