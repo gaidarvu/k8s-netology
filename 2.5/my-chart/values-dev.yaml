@@ -1,0 +1,19 @@
+frontend:
+  name: gaidar-test-nginx
+  replicas: 1
+  image:
+    repository: nginx
+    tag: 1.26-perl
+  service:
+    name: nginx-service
+    type: ClusterIP
+
+backend:
+  name: gaidar-test-echoserver
+  replicas: 2
+  image:
+    repository: gcr.io/kubernetes-e2e-test-images/echoserver
+    tag: 2.2
+  service:
+    name: echoserver-service
+    type: ClusterIP
