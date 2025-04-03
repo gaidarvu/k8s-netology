@@ -1,13 +1,13 @@
 frontend:
-  name: gaidar-dev-nginx
+  name: gaidar-test-nginx
   replicas: 1
   image:
-    tag: 1.26-perl
+    tag: 1.27.4-bookworm-perl
   service:
     enabled: false
 
 backend:
-  name: gaidar-dev-echoserver
+  name: gaidar-test-echoserver
   replicas: 2
   image:
     tag: 2.1

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.frontend.name }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ .Values.frontend.name }}
 spec:
@@ -42,8 +43,9 @@ spec:
           image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
           ports:
             - containerPort: 8080
-
 ---
+
+{{- if .Values.frontend.service.enabled  }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -56,8 +58,10 @@ spec:
       port: 80
       targetPort: 80
   type: {{ .Values.frontend.service.type }}
-
 ---
+{{- end }}
+
+{{- if .Values.backend.service.enabled  }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -70,4 +74,6 @@ spec:
       port: 8080
       targetPort: 8080
   type: {{ .Values.backend.service.type }}
+---
+{{- end }}
   
